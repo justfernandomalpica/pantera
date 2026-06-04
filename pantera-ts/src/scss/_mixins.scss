@@ -1,0 +1,53 @@
+@use "./variables" as v;
+
+@mixin setPlayerBackground {
+  transition: background-color 500ms ease;
+
+  &.O {
+    background-color: v.$o-player-color;
+  }
+
+  &.X {
+    background-color: v.$x-player-color;
+  }
+
+  &.DRAW {
+    background-color: v.$draw-cell-color;
+  }
+}
+
+@mixin button {
+  margin: 0;
+  height: fit-content;
+  padding: 10px 15px;
+
+  background-color: v.$btn-base;
+  color: v.$tx-base-color;
+
+  border: 1px v.$bdr-07 solid;
+  border-radius: v.$border-radius;
+
+  transition:
+    background-color v.$time-short linear,
+    border-color v.$time-short linear,
+    color v.$time-short linear,
+    box-shadow v.$time-short linear,
+    transform v.$time-short ease;
+
+  &:hover {
+    background-color: v.$btn-hover;
+    cursor: pointer;
+  }
+  &:active {
+    transform: translateY(2px);
+  }
+  &:focus {
+    box-shadow: 0 0 0 2px #0096bfab;
+  }
+}
+
+@mixin phone {
+  @media (max-width: 480px) {
+    @content;
+  }
+}

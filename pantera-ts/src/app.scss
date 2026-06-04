@@ -1,0 +1,295 @@
+@forward "./scss/global";
+@use "./scss/variables" as v;
+@use "./scss/mixins" as m;
+
+body {
+  font-family: "Kode Mono", monospace;
+  background-color: v.$bg-base;
+  color: v.$tx-base-color;
+
+  h1 {
+    font-size: 5rem;
+    margin: 0;
+  }
+}
+
+#toast-container {
+  top: 30px;
+  right: 30px;
+  position: fixed;
+
+  width: auto;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .toast {
+    // opacity: 0;
+    max-width: 85vw;
+    background-color: v.$bg-light;
+    padding: 18px 15px;
+    border: 1px v.$bdr-07 solid;
+    border-radius: v.$border-radius;
+
+    display: flex;
+    gap: 15px;
+
+    // transition: opacity 500ms ease;
+
+    // &.visible {
+    //   opacity: 100%;
+    // }
+
+    p {
+      margin: 0;
+      place-content: center;
+    }
+
+    button {
+      @include m.button;
+    }
+  }
+}
+
+.playground {
+  max-width: 390px;
+  width: 90%;
+  margin: 16px auto;
+  margin-top: 0;
+  margin-bottom: 5rem;
+
+  .screen {
+    &-menu,
+    &-wait {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      button {
+        @include m.button;
+      }
+    }
+
+    &-menu {
+      gap: 2.5rem;
+      margin-top: 4rem;
+      .buttons {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      input[type="text"] {
+        background-color: v.$btn-base;
+        color: v.$tx-base-color;
+
+        border: none;
+        border-radius: v.$border-radius;
+
+        padding: 10px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-family: "Poppins", sans-serif;
+        max-width: 15rem;
+        letter-spacing: 8px;
+
+        &::placeholder {
+          letter-spacing: normal;
+        }
+      }
+    }
+
+    &-wait {
+      gap: 1.2rem;
+      text-align: center;
+      color: v.$tx-soft-color;
+      font-size: 1.5rem;
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 0;
+      }
+      strong {
+        color: v.$tx-base-color;
+        font-family: "Poppins", sans-serif;
+        font-size: 1.8rem;
+      }
+      button {
+        font-size: 1rem;
+      }
+    }
+
+    &-game {
+      @include m.phone {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @include m.phone {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+
+    @include m.phone {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button {
+      @include m.button;
+      font-size: 0.9rem;
+    }
+  }
+
+  .current-player {
+    .label {
+      text-align: center;
+      margin: 0;
+      margin-bottom: 5px;
+    }
+
+    .player-box {
+      margin: 0 auto;
+      border: 1px v.$bdr-07 solid;
+      border-radius: v.$border-radius;
+      height: 60px;
+      width: 100%;
+
+      text-align: center;
+      align-content: center;
+      font-size: 40px;
+      font-weight: 700;
+
+      pointer-events: none;
+      user-select: none;
+      @include m.setPlayerBackground;
+    }
+  }
+}
+
+.game {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mini-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(30px, 1fr));
+  border: 1px rgba(#fff, 0.75) solid;
+
+  position: relative;
+
+  .cell {
+    aspect-ratio: 1;
+    margin: 0;
+    border: 1px rgba(#fff, 0.2) solid;
+
+    text-align: center;
+    align-content: center;
+    font-size: 25px;
+    color: v.$tx-base-color;
+
+    user-select: none;
+
+    transition:
+      background-color v.$time-short ease,
+      transform v.$time-short ease;
+
+    &.active {
+      background-color: rgba(#fff, 0.1);
+      &:hover {
+        background-color: rgba(#fff, 0.3);
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+    }
+
+    &.inactive {
+      pointer-events: none;
+      background-color: rgba(#000, 0.2);
+    }
+
+    &.opponent-available {
+      pointer-events: none;
+    }
+
+    &.opponent-available.X {
+      background-color: rgba(v.$x-player-color, 0.05);
+    }
+
+    &.opponent-available.O {
+      background-color: rgba(v.$o-player-color, 0.08);
+    }
+  }
+
+  &.X,
+  &.O,
+  &.DRAW {
+    .cell {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  &.X::after,
+  &.O::after {
+    position: absolute;
+    inset: 0;
+
+    text-align: center;
+    align-content: center;
+
+    font-size: 6rem;
+    font-weight: 700;
+    backdrop-filter: blur(2px);
+  }
+
+  &.O::after {
+    content: "O";
+  }
+
+  &.X::after {
+    content: "X";
+  }
+
+  @include m.setPlayerBackground;
+}
+
+.instructions {
+  max-width: 1000px;
+  width: 80%;
+  margin: 0 auto;
+
+  h2,
+  h3 {
+    font-size: 2.2rem;
+    color: v.$tx-base-color;
+  }
+
+  h3 {
+    font-size: 1.7rem;
+  }
+
+  p {
+    color: v.$tx-soft-color;
+    font-family: "Poppins", sans-serif;
+    padding-left: 2rem;
+  }
+}

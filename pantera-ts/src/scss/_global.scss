@@ -1,0 +1,52 @@
+@use "./variables" as v;
+
+@forward "./components/spinner";
+
+@import url(https://necolas.github.io/normalize.css/8.0.1/normalize.css);
+@import url(https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
+
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+h1 {
+  text-align: center;
+}
+
+// button {
+//   margin: 0;
+//   height: fit-content;
+//   padding: 10px 15px;
+
+//   background-color: v.$btn-base;
+//   color: v.$tx-base-color;
+
+//   border: 1px v.$bdr-07 solid;
+//   border-radius: v.$border-radius;
+
+//   transition:
+//     background-color v.$time-short linear,
+//     border-color v.$time-short linear,
+//     color v.$time-short linear,
+//     box-shadow v.$time-short linear,
+//     transform v.$time-short ease;
+
+//   &:hover {
+//     background-color: v.$btn-hover;
+//     cursor: pointer;
+//   }
+//   &:active {
+//     transform: translateY(2px);
+//   }
+//   &:focus {
+//     box-shadow: 0 0 0 2px #0096bfab;
+//   }
+// }
