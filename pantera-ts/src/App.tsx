@@ -8,6 +8,7 @@ import Instructions from "./components/Instructions";
 import Game from "./components/Game";
 import Menu from "./components/Menu";
 import Wait from "./components/Wait";
+import Footer from "./components/Footer";
 
 const initialAppState: AppState = {
   screen: "MENU",
@@ -189,6 +190,7 @@ export default function App() {
         )}
       </div>
       <Instructions />
+      <Footer />
     </main>
   );
 }

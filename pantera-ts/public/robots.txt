@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pantera.justfernandomalpica.com/sitemap.xml

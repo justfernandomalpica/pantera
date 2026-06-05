@@ -293,3 +293,25 @@ body {
     padding-left: 2rem;
   }
 }
+
+.footer {
+  width: 100%;
+  padding: 4rem 0;
+  p {
+    max-width: fit-content;
+    width: 90%;
+    margin: 0 auto;
+    font-family: "Poppins", sans-serif;
+    color: v.$tx-soft-color;
+
+    a {
+      color: v.$tx-base-color;
+      text-decoration: none;
+
+      transition: color v.$time-long ease;
+      &:hover {
+        color: v.$btn-active;
+      }
+    }
+  }
+}
