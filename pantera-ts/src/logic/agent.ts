@@ -22,6 +22,30 @@ const WINNING_LINES = [
   [2, 4, 6],
 ] as const;
 
+export const EASY_AGENT: AgentConfig = {
+  topMoves: 4,
+  includeMiddleMove: true,
+  badMoves: 3,
+  smallPoolLimit: 11,
+  smallPoolTopMoves: 3,
+};
+
+export const NORMAL_AGENT: AgentConfig = {
+  topMoves: 6,
+  includeMiddleMove: true,
+  badMoves: 1,
+  smallPoolLimit: 11,
+  smallPoolTopMoves: 3,
+};
+
+export const HARD_AGENT: AgentConfig = {
+  topMoves: 2,
+  includeMiddleMove: false,
+  badMoves: 0,
+  smallPoolLimit: 8,
+  smallPoolTopMoves: 2,
+};
+
 export function getAgentMove(
   state: GameState,
   agentPlayer: Player,

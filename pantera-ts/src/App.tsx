@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { createInitialState, applyMove } from "./logic/game";
 import { createConnection } from "./logic/socket";
-import { getAgentMove } from "./logic/agent";
+import { getAgentMove, HARD_AGENT } from "./logic/agent";
 
 import type {
-  AgentConfig,
   AppState,
   ClientMessage,
   Connection,
@@ -23,30 +22,6 @@ const initialAppState: AppState = {
   roomCode: null,
   myPlayer: null,
   agentPlayer: null,
-};
-
-const EASY_AGENT: AgentConfig = {
-  topMoves: 4,
-  includeMiddleMove: true,
-  badMoves: 3,
-  smallPoolLimit: 11,
-  smallPoolTopMoves: 3,
-};
-
-const NORMAL_AGENT: AgentConfig = {
-  topMoves: 6,
-  includeMiddleMove: true,
-  badMoves: 1,
-  smallPoolLimit: 11,
-  smallPoolTopMoves: 3,
-};
-
-const HARD_AGENT: AgentConfig = {
-  topMoves: 2,
-  includeMiddleMove: false,
-  badMoves: 0,
-  smallPoolLimit: 8,
-  smallPoolTopMoves: 2,
 };
 
 export default function App() {
