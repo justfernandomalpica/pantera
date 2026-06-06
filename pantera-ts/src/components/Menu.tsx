@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type SubmitEvent } from "react";
 
 interface MenuProps {
   handlePlayLocal: () => void;
@@ -14,6 +14,11 @@ export default function Menu({
   handleJoinRoom,
 }: MenuProps) {
   const [code, setCode] = useState("");
+
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>, code: string) {
+    e.preventDefault();
+    handleJoinRoom(code);
+  }
 
   function handleInputChange(code: string) {
     if (code.length > 4) return;
@@ -33,16 +38,16 @@ export default function Menu({
           Crear sala
         </button>
       </div>
-      <input
-        id="roomCode"
-        type="text"
-        placeholder="Código de sala"
-        value={code}
-        onChange={(e) => handleInputChange(e.target.value)}
-      />
-      <button type="button" onClick={() => handleJoinRoom(code)}>
-        Unirse
-      </button>
+      <form className="code-form" onSubmit={(e) => handleSubmit(e, code)}>
+        <input
+          id="roomCode"
+          type="text"
+          placeholder="Código de sala"
+          value={code}
+          onChange={(e) => handleInputChange(e.target.value)}
+        />
+        <input id="submitGameCode" type="submit" value="Unirse" />
+      </form>
     </section>
   );
 }
