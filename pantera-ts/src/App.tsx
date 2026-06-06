@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { createInitialState, applyMove } from "./logic/game";
+import { createConnection } from "./logic/socket";
+import { getAgentMove } from "./logic/agent";
 
 import type {
+  AgentConfig,
   AppState,
   ClientMessage,
   Connection,
   Player,
 } from "./logic/types";
-import { createConnection } from "./logic/socket";
 
 import Instructions from "./components/Instructions";
 import Game from "./components/Game";
@@ -20,6 +22,31 @@ const initialAppState: AppState = {
   gameMode: "LOCAL",
   roomCode: null,
   myPlayer: null,
+  agentPlayer: null,
+};
+
+const EASY_AGENT: AgentConfig = {
+  topMoves: 4,
+  includeMiddleMove: true,
+  badMoves: 3,
+  smallPoolLimit: 11,
+  smallPoolTopMoves: 3,
+};
+
+const NORMAL_AGENT: AgentConfig = {
+  topMoves: 6,
+  includeMiddleMove: true,
+  badMoves: 1,
+  smallPoolLimit: 11,
+  smallPoolTopMoves: 3,
+};
+
+const HARD_AGENT: AgentConfig = {
+  topMoves: 2,
+  includeMiddleMove: false,
+  badMoves: 0,
+  smallPoolLimit: 8,
+  smallPoolTopMoves: 2,
 };
 
 export default function App() {
@@ -29,7 +56,7 @@ export default function App() {
 
   const connectionRef = useRef<Connection | null>(null);
   const pendingActionRef = useRef<ClientMessage | null>(null);
-  const myPlayerRef = useRef<Player | null>(null);
+  // const myPlayerRef = useRef<Player | null>(null);
 
   useEffect(() => {
     if (appState.gameMode !== "ONLINE") return;
@@ -48,7 +75,7 @@ export default function App() {
       },
       onGameStart: (_code, player, starts) => {
         // if (code !== appState.roomCode) return; // Aqui puedo manejar un error de mal código
-        myPlayerRef.current = player;
+        // myPlayerRef.current = player;
         setAppState((prevState) => ({
           ...prevState,
           screen: "GAME",
@@ -83,6 +110,32 @@ export default function App() {
   }, [appState.gameMode]);
 
   useEffect(() => {
+    if (appState.gameMode !== "AGENT") return;
+    if (appState.agentPlayer === null) return;
+    if (gameState.winner !== null) return;
+    if (gameState.currentPlayer !== appState.agentPlayer) return;
+
+    const agentPlayer = appState.agentPlayer;
+
+    const timeoutId = window.setTimeout(
+      () => {
+        const move = getAgentMove(gameState, agentPlayer, HARD_AGENT);
+
+        if (move === null) return;
+
+        setGameState((prevState) =>
+          applyMove(prevState, move.boardIndex, move.cellIndex),
+        );
+      },
+      600 + Math.random() * 300,
+    );
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [appState.gameMode, appState.agentPlayer, gameState]);
+
+  useEffect(() => {
     setTimeout(() => {
       setToastState([]);
     }, 6000);
@@ -90,7 +143,7 @@ export default function App() {
 
   const canPlay =
     appState.gameMode === "LOCAL" ||
-    myPlayerRef.current === gameState.currentPlayer;
+    appState.myPlayer === gameState.currentPlayer;
 
   function handleReset() {
     if (appState.gameMode === "ONLINE") {
@@ -107,6 +160,29 @@ export default function App() {
       ...appState,
       screen: "GAME",
       gameMode: "LOCAL",
+    });
+  }
+
+  function handlePlayAgent() {
+    function getRandomComparation() {
+      const a = Math.random();
+      const b = Math.random() * 100;
+      const c = Math.sqrt(a * b) ** 4;
+      const d = 650;
+
+      return c < d;
+    }
+    const playerStart: Player = getRandomComparation() ? "X" : "O";
+    const myPlayer: Player = getRandomComparation() ? "X" : "O";
+    const agentPlayer: Player = myPlayer === "X" ? "O" : "X";
+
+    setGameState(createInitialState(playerStart));
+    setAppState({
+      ...initialAppState,
+      screen: "GAME",
+      gameMode: "AGENT",
+      myPlayer: myPlayer,
+      agentPlayer: agentPlayer,
     });
   }
 
@@ -176,6 +252,7 @@ export default function App() {
         {appState.screen === "MENU" && (
           <Menu
             handlePlayLocal={handlePlayLocal}
+            handlePlayAgent={handlePlayAgent}
             handleCreateRoom={handleCreateRoom}
             handleJoinRoom={handleJoinRoom}
           />
@@ -187,8 +264,10 @@ export default function App() {
           <Game
             state={gameState}
             canPlay={canPlay}
-            isOnline={appState.gameMode === "ONLINE"}
-            myPlayer={myPlayerRef.current}
+            isMultiplayer={
+              appState.gameMode === "ONLINE" || appState.gameMode === "AGENT"
+            }
+            myPlayer={appState.myPlayer}
             handleReset={handleReset}
             handleGoToMenu={handleGoToMenu}
             handleDeleteRoom={handleGoToMenu}

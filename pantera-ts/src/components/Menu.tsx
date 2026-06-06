@@ -2,12 +2,14 @@ import { useState } from "react";
 
 interface MenuProps {
   handlePlayLocal: () => void;
+  handlePlayAgent: () => void;
   handleCreateRoom: () => void;
   handleJoinRoom: (code: string) => void;
 }
 
 export default function Menu({
   handlePlayLocal,
+  handlePlayAgent,
   handleCreateRoom,
   handleJoinRoom,
 }: MenuProps) {
@@ -23,6 +25,9 @@ export default function Menu({
       <div className="buttons">
         <button type="button" onClick={handlePlayLocal}>
           Jugar localmente
+        </button>
+        <button type="button" onClick={handlePlayAgent}>
+          Jugar contra IA
         </button>
         <button type="button" onClick={handleCreateRoom}>
           Crear sala

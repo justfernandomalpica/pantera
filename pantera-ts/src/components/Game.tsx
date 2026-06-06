@@ -5,7 +5,7 @@ import DeleteRoom from "./DeleteRoom";
 interface GameProps {
   state: GameState;
   canPlay: boolean;
-  isOnline: boolean;
+  isMultiplayer: boolean;
   myPlayer: "X" | "O" | null;
   handleMove: (boardIndex: number, cellIndex: number) => void;
   handleGoToMenu: () => void;
@@ -16,7 +16,7 @@ interface GameProps {
 export default function Game({
   state,
   canPlay,
-  isOnline,
+  isMultiplayer,
   myPlayer,
   handleMove,
   handleGoToMenu,
@@ -32,8 +32,8 @@ export default function Game({
               {state.winner === "DRAW"
                 ? "¡Empate!"
                 : state.winner === null
-                  ? "Turno actual"
-                  : "¡El ganador!"}
+                  ? "Actual"
+                  : "¡Ganador!"}
             </p>
             <p
               className={`player-box ${state.winner === "DRAW" ? "" : (state.winner ?? state.currentPlayer)}`}
@@ -43,7 +43,7 @@ export default function Game({
                 : (state.winner ?? state.currentPlayer)}
             </p>
           </div>
-          {isOnline && (
+          {isMultiplayer && (
             <div className="my-player">
               <p className="label">Yo</p>
               <p className={`my-player-box ${myPlayer}`}>
@@ -59,7 +59,7 @@ export default function Game({
           )}
         </div>
         <div className="buttons">
-          {!isOnline && (
+          {!isMultiplayer && (
             <button
               className="reset-game"
               type="button"
@@ -69,7 +69,7 @@ export default function Game({
               Menu
             </button>
           )}
-          {(!isOnline || (isOnline && state.winner !== null)) && (
+          {(!isMultiplayer || (isMultiplayer && state.winner !== null)) && (
             <button
               className="reset-game"
               type="button"
@@ -79,7 +79,7 @@ export default function Game({
               Reiniciar
             </button>
           )}
-          {isOnline && <DeleteRoom handleDeleteRoom={handleDeleteRoom} />}
+          {isMultiplayer && <DeleteRoom handleDeleteRoom={handleDeleteRoom} />}
         </div>
       </div>
       <div className={`game${state.winner ? ` winner-${state.winner}` : ""}`}>
