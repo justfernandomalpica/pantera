@@ -131,13 +131,14 @@ class PanteraServer implements MessageComponentInterface
         }
 
         $playerX = $room->getOpponent($conn);
+        $playerStarts = $this->generateRandomPlayer();
 
         if ($playerX !== null) {
             $playerX->send(json_encode([
                 'type' => 'game_start',
                 'code' => $room->getCode(),
                 'player' => 'X',
-                'starts' => 'X',
+                'starts' => $playerStarts,
             ]));
         }
 
@@ -145,7 +146,7 @@ class PanteraServer implements MessageComponentInterface
             'type' => 'game_start',
             'code' => $room->getCode(),
             'player' => $player,
-            'starts' => 'X',
+            'starts' => $playerStarts,
         ]));
     }
 
@@ -186,7 +187,7 @@ class PanteraServer implements MessageComponentInterface
 
         $room->sendToBoth([
             'type' => 'game_restart',
-            'starts' => 'X',
+            'starts' => $this->generateRandomPlayer(),
         ]);
     }
 
@@ -196,5 +197,9 @@ class PanteraServer implements MessageComponentInterface
             'type' => 'error',
             'message' => $message,
         ]));
+    }
+
+    private function generateRandomPlayer(): string {
+        return rand(0, 1) === 0 ? "X" : "O";
     }
 }

@@ -17,6 +17,7 @@ export function createConnection(callbacks: ConnectionCallbacks): Connection {
         break;
 
       case "game_start":
+        console.log("RAW message:", JSON.stringify(message));
         callbacks.onGameStart(message.code, message.player, message.starts);
         break;
 

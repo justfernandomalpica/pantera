@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { createInitialState, applyMove } from "./logic/game";
 
-import type { AppState, ClientMessage, Connection } from "./logic/types";
+import type {
+  AppState,
+  ClientMessage,
+  Connection,
+  Player,
+} from "./logic/types";
 import { createConnection } from "./logic/socket";
 
 import Instructions from "./components/Instructions";
@@ -24,6 +29,7 @@ export default function App() {
 
   const connectionRef = useRef<Connection | null>(null);
   const pendingActionRef = useRef<ClientMessage | null>(null);
+  const myPlayerRef = useRef<Player | null>(null);
 
   useEffect(() => {
     if (appState.gameMode !== "ONLINE") return;
@@ -42,6 +48,7 @@ export default function App() {
       },
       onGameStart: (_code, player, starts) => {
         // if (code !== appState.roomCode) return; // Aqui puedo manejar un error de mal código
+        myPlayerRef.current = player;
         setAppState((prevState) => ({
           ...prevState,
           screen: "GAME",
@@ -53,7 +60,6 @@ export default function App() {
         setGameState(createInitialState(starts));
       },
       onMove: (boardIndex, cellIndex) => {
-        console.log("Movimiento recibido:", boardIndex, cellIndex);
         setGameState((prevState) =>
           applyMove(prevState, boardIndex, cellIndex),
         );
@@ -84,7 +90,7 @@ export default function App() {
 
   const canPlay =
     appState.gameMode === "LOCAL" ||
-    appState.myPlayer === gameState.currentPlayer;
+    myPlayerRef.current === gameState.currentPlayer;
 
   function handleReset() {
     if (appState.gameMode === "ONLINE") {
