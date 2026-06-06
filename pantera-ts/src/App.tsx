@@ -188,6 +188,7 @@ export default function App() {
             state={gameState}
             canPlay={canPlay}
             isOnline={appState.gameMode === "ONLINE"}
+            myPlayer={myPlayerRef.current}
             handleReset={handleReset}
             handleGoToMenu={handleGoToMenu}
             handleDeleteRoom={handleGoToMenu}

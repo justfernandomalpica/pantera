@@ -6,6 +6,7 @@ interface GameProps {
   state: GameState;
   canPlay: boolean;
   isOnline: boolean;
+  myPlayer: "X" | "O" | null;
   handleMove: (boardIndex: number, cellIndex: number) => void;
   handleGoToMenu: () => void;
   handleReset: () => void;
@@ -16,6 +17,7 @@ export default function Game({
   state,
   canPlay,
   isOnline,
+  myPlayer,
   handleMove,
   handleGoToMenu,
   handleReset,
@@ -24,21 +26,37 @@ export default function Game({
   return (
     <section className="screen-game">
       <div className="controls">
-        <div className="current-player">
-          <p className="label">
-            {state.winner === "DRAW"
-              ? "¡Empate!"
-              : state.winner === null
-                ? "Turno actual"
-                : "¡El ganador!"}
-          </p>
-          <p
-            className={`player-box ${state.winner === "DRAW" ? "" : (state.winner ?? state.currentPlayer)}`}
-          >
-            {state.winner === "DRAW"
-              ? "-"
-              : (state.winner ?? state.currentPlayer)}
-          </p>
+        <div className="game-status">
+          <div className="current-player">
+            <p className="label">
+              {state.winner === "DRAW"
+                ? "¡Empate!"
+                : state.winner === null
+                  ? "Turno actual"
+                  : "¡El ganador!"}
+            </p>
+            <p
+              className={`player-box ${state.winner === "DRAW" ? "" : (state.winner ?? state.currentPlayer)}`}
+            >
+              {state.winner === "DRAW"
+                ? "-"
+                : (state.winner ?? state.currentPlayer)}
+            </p>
+          </div>
+          {isOnline && (
+            <div className="my-player">
+              <p className="label">Yo</p>
+              <p className={`my-player-box ${myPlayer}`}>
+                {state.winner === "DRAW"
+                  ? ":|"
+                  : state.winner !== null
+                    ? state.winner === myPlayer
+                      ? ":)"
+                      : ":("
+                    : myPlayer}
+              </p>
+            </div>
+          )}
         </div>
         <div className="buttons">
           {!isOnline && (

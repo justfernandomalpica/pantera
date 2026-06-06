@@ -157,28 +157,58 @@ body {
     }
   }
 
-  .current-player {
-    .label {
-      text-align: center;
-      margin: 0;
-      margin-bottom: 5px;
+  .game-status {
+    display: flex;
+    align-items: end;
+    gap: 15px;
+    .current-player {
+      .label {
+        text-align: center;
+        margin: 0;
+        margin-bottom: 5px;
+      }
+
+      .player-box {
+        margin: 0 auto;
+        border: 1px v.$bdr-07 solid;
+        border-radius: v.$border-radius;
+        height: 60px;
+        width: 100%;
+
+        text-align: center;
+        align-content: center;
+        font-size: 40px;
+        font-weight: 700;
+
+        pointer-events: none;
+        user-select: none;
+        @include m.setPlayerBackground;
+      }
     }
 
-    .player-box {
-      margin: 0 auto;
-      border: 1px v.$bdr-07 solid;
-      border-radius: v.$border-radius;
-      height: 60px;
-      width: 100%;
+    .my-player {
+      height: fit-content;
+      .label {
+        margin: 0;
+        margin-bottom: 5px;
+        text-align: center;
+      }
+      &-box {
+        margin: 0;
+        border: 1px v.$bdr-07 solid;
+        border-radius: v.$border-radius;
 
-      text-align: center;
-      align-content: center;
-      font-size: 40px;
-      font-weight: 700;
+        padding: 10px 15px;
 
-      pointer-events: none;
-      user-select: none;
-      @include m.setPlayerBackground;
+        text-align: center;
+        align-content: center;
+
+        font-size: 20px;
+
+        white-space: nowrap;
+
+        @include m.setPlayerBackground;
+      }
     }
   }
 }
